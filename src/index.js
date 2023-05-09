@@ -8,6 +8,9 @@ import "./index.scss";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 
+import { Provider } from "react-redux";
+import store from "./redux/store";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -15,7 +18,9 @@ root.render(
     <CssBaseline />
     <ThemeProvider theme={theme}>
       <Router>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </Router>
     </ThemeProvider>
   </React.StrictMode>
