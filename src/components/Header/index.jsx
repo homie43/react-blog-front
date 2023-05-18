@@ -6,7 +6,7 @@ import styles from "./Header.module.scss";
 import Container from "@mui/material/Container";
 
 export const Header = () => {
-  const isAuth = true;
+  const isAuth = false;
 
   const onClickLogout = () => {};
 

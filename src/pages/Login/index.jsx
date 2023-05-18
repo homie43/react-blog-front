@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
@@ -7,8 +8,10 @@ import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 
 import styles from "./Login.module.scss";
+import { fetchAuth } from "../../redux/slices/authSlice";
 
 export const Login = () => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -16,16 +19,16 @@ export const Login = () => {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      email: "",
-      password: "",
+      email: "dary@test.ru",
+      password: "12345",
     },
     mode: "onChange",
   });
 
   const onSubmit = (values) => {
-    console.log(values);
+    dispatch(fetchAuth(values));
   };
-  console.log(errors, isValid);
+
   return (
     <Paper classes={{ root: styles.root }}>
       <Typography classes={{ root: styles.title }} variant="h5">
