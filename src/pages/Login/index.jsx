@@ -1,5 +1,6 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
@@ -8,9 +9,12 @@ import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 
 import styles from "./Login.module.scss";
-import { fetchAuth } from "../../redux/slices/authSlice";
+import { fetchAuth, selectIsAuth } from "../../redux/slices/authSlice";
 
 export const Login = () => {
+  // информация об авторизации клиента(да или нет)
+  const isAuth = useSelector(selectIsAuth);
+  console.log(isAuth);
   const dispatch = useDispatch();
   const {
     register,
@@ -20,7 +24,7 @@ export const Login = () => {
   } = useForm({
     defaultValues: {
       email: "dary@test.ru",
-      password: "12345",
+      password: "1234",
     },
     mode: "onChange",
   });
@@ -28,6 +32,11 @@ export const Login = () => {
   const onSubmit = (values) => {
     dispatch(fetchAuth(values));
   };
+
+  // если авторизован, гоу на главную
+  if (isAuth) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <Paper classes={{ root: styles.root }}>
