@@ -6,8 +6,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
 
-import axios from "../axios";
-
 import { Post } from "../components/Post";
 import { TagsBlock } from "../components/TagsBlock";
 import { CommentsBlock } from "../components/CommentsBlock";
@@ -16,6 +14,9 @@ import { fetchPosts, fetchTags } from "../redux/slices/postsSlice";
 export const Home = () => {
   const dispatch = useDispatch();
   const { posts, tags } = useSelector((state) => state.posts);
+
+  // userData объект авториации
+  const userData = useSelector((state) => state.auth.data);
 
   const isPostLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
@@ -46,7 +47,8 @@ export const Home = () => {
                 viewsCount={obj.viewsCount}
                 commentsCount={3}
                 tags={obj.tags}
-                isEditable
+                // если есть userData, то сравниваем его _id, с _id постаЮ если совпадают, то редактировать и удалять можно
+                isEditable={userData?._id === obj.user._id}
               />
             )
           )}
