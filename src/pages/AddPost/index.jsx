@@ -17,6 +17,10 @@ export const AddPost = () => {
 
   const imageUrl = "";
   const [value, setValue] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [tags, setTags] = React.useState("");
+
+  console.log(title, tags, value);
 
   const handleChangeFile = () => {};
 
@@ -60,8 +64,22 @@ export const AddPost = () => {
       {imageUrl && <img className={styles.image} src={`http://localhost:4444${imageUrl}`} alt="Uploaded" />}
       <br />
       <br />
-      <TextField classes={{ root: styles.title }} variant="standard" placeholder="Заголовок статьи..." fullWidth />
-      <TextField classes={{ root: styles.tags }} variant="standard" placeholder="Тэги" fullWidth />
+      <TextField
+        classes={{ root: styles.title }}
+        variant="standard"
+        placeholder="Заголовок статьи..."
+        fullWidth
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <TextField
+        classes={{ root: styles.tags }}
+        variant="standard"
+        placeholder="Тэги"
+        fullWidth
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
+      />
       <SimpleMDE className={styles.editor} value={value} onChange={onChange} options={options} />
       <div className={styles.buttons}>
         <Button size="large" variant="contained">
