@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -13,16 +13,18 @@ import "easymde/dist/easymde.min.css";
 import styles from "./AddPost.module.scss";
 
 export const AddPost = () => {
+  const navigate = useNavigate();
   // информация об авторизации клиента(да или нет)
   const isAuth = useSelector(selectIsAuth);
 
   const [imageUrl, setImageUrl] = React.useState("");
-  const [value, setValue] = React.useState("");
+  const [text, setText] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [tags, setTags] = React.useState("");
   const inputFileRef = React.useRef(null);
 
-  console.log(title, tags, value);
+  console.log(title, tags, text);
 
   const handleChangeFile = async (event) => {
     try {
@@ -42,8 +44,30 @@ export const AddPost = () => {
   };
 
   const onChange = React.useCallback((value) => {
-    setValue(value);
+    setText(value);
   }, []);
+
+  const onSubmit = async () => {
+    try {
+      setIsLoading(true);
+
+      const fields = {
+        title,
+        imageUrl,
+        tags,
+        text,
+      };
+
+      const { data } = await axios.post("/posts", fields);
+
+      const id = data._id;
+
+      navigate(`/posts/${id}`);
+    } catch (error) {
+      console.warn(error);
+      alert("Ошибка при создании поста");
+    }
+  };
 
   const options = React.useMemo(
     () => ({
@@ -98,9 +122,9 @@ export const AddPost = () => {
         value={tags}
         onChange={(e) => setTags(e.target.value)}
       />
-      <SimpleMDE className={styles.editor} value={value} onChange={onChange} options={options} />
+      <SimpleMDE className={styles.editor} text={text} onChange={onChange} options={options} />
       <div className={styles.buttons}>
-        <Button size="large" variant="contained">
+        <Button onClick={onSubmit} size="large" variant="contained">
           Опубликовать
         </Button>
         <a href="/">
